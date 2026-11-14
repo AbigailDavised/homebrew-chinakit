@@ -1,0 +1,105 @@
+#!/usr/bin/env node
+/**
+ * chinakit-cli v1.0.0
+ * Inbound China CAAC Wh Power-Bank, TWOV & Statutory Compliance Reference CLI
+ * Official reference utility for https://chinakit.io
+ * License: MIT
+ */
+
+const ROUTES = [
+  {
+    "name": "ChinaKit Home",
+    "url": "https://chinakit.io/"
+  },
+  {
+    "name": "China 240-Hour Visa-Free Transit Route Checker",
+    "url": "https://chinakit.io/tools/transit-check"
+  },
+  {
+    "name": "Inbound China Visa Category & Exemption Wizard",
+    "url": "https://chinakit.io/tools/visa-wizard"
+  },
+  {
+    "name": "CAAC Airport Power-Bank Watt-Hour (Wh) Calculator",
+    "url": "https://chinakit.io/tools/powerbank-calculator"
+  },
+  {
+    "name": "China Customs Personal Medication Compliance Checker",
+    "url": "https://chinakit.io/tools/meds-checker"
+  },
+  {
+    "name": "Foreigner Hotel Registration Rights & Bilingual Card",
+    "url": "https://chinakit.io/tools/hotel-rights"
+  }
+];
+
+const SPECS = [
+  {
+    "Compliance Domain": "CAAC Power Bank Tier 1",
+    "Statutory Threshold": "<= 100 Wh (~27,000 mAh @ 3.7V)",
+    "Formula / Legal Rule": "Wh = (mAh * V) / 1000",
+    "Operational Outcome": "Carry-on permitted without airline approval"
+  },
+  {
+    "Compliance Domain": "CAAC Power Bank Tier 2",
+    "Statutory Threshold": "100.1 - 160 Wh",
+    "Formula / Legal Rule": "Max 2 units per passenger",
+    "Operational Outcome": "Requires check-in counter airline approval"
+  },
+  {
+    "Compliance Domain": "CAAC Power Bank Tier 3",
+    "Statutory Threshold": "> 160 Wh or unlabeled",
+    "Formula / Legal Rule": "Zero tolerance at security",
+    "Operational Outcome": "Confiscated; strictly banned in checked bags"
+  },
+  {
+    "Compliance Domain": "Alipay / WeChat Foreign Card",
+    "Statutory Threshold": "<= 200 CNY per txn",
+    "Formula / Legal Rule": "International Visa/Mastercard",
+    "Operational Outcome": "0% platform surcharge waived automatically"
+  },
+  {
+    "Compliance Domain": "Alipay / WeChat Large Txn",
+    "Statutory Threshold": "> 200 CNY per txn",
+    "Formula / Legal Rule": "3.0% international card fee",
+    "Operational Outcome": "Split orders <= 200 CNY where merchants allow"
+  },
+  {
+    "Compliance Domain": "PSB Temporary Registration",
+    "Statutory Threshold": "24 hours (urban) / 72h (rural)",
+    "Formula / Legal Rule": "Exit-Entry Admin Law Art. 39",
+    "Operational Outcome": "Auto-filed by hotels; self-file for private stays"
+  }
+];
+
+const args = process.argv.slice(2);
+
+if (args.includes('--version') || args.includes('-v')) {
+  console.log('chinakit-cli v1.0.0 (https://chinakit.io)');
+  process.exit(0);
+}
+
+if (args.includes('--routes')) {
+  console.log(JSON.stringify({ domain: 'chinakit.io', endpoints: ROUTES }, null, 2));
+  process.exit(0);
+}
+
+if (args.includes('--specs') || args.includes('--json')) {
+  console.log(JSON.stringify({ domain: 'chinakit.io', benchmark: "Inbound China Statutory & Payment Threshold Matrix (2026)", rows: SPECS }, null, 2));
+  process.exit(0);
+}
+
+console.log([
+  'ChinaKit CLI (chinakit-cli v1.0.0)',
+  'Inbound China CAAC Wh Power-Bank, TWOV & Statutory Compliance Reference CLI',
+  'Homepage: https://chinakit.io',
+  '',
+  'Usage:',
+  '  chinakit-cli --help       Show command overview and verified endpoints',
+  '  chinakit-cli --version    Print CLI version',
+  '  chinakit-cli --specs      Output domain technical specification matrix as JSON',
+  '  chinakit-cli --routes     Output verified production URLs as JSON',
+  '',
+  'Verified Production Endpoints:',
+  ...ROUTES.map((r) => '  - ' + r.name + ': ' + r.url),
+].join('\n'));
